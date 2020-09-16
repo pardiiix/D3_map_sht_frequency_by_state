@@ -136,7 +136,7 @@ svg.selectAll("circle")
 		return projection([d.Longitude, d.Latitude])[0];
 	})
 	.attr("cy", function(d) {
-		return projection([d.Longitude, d.Latitude][1]);
+		return projection([d.Longitude, d.Latitude])[1];
 	})
 	.attr("r", function(d) {
 		return 4;
