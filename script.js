@@ -7,7 +7,14 @@ Malcolm Maclean, tooltips example tutorial
 http://www.d3noob.org/2013/01/adding-tooltips-to-d3js-graph.html
 
 Mike Bostock, Pie Chart Legend
-http://bl.ocks.org/mbostock/3888852  */
+http://bl.ocks.org/mbostock/3888852 
+
+Lat and Long of states taken from:
+https://www.kaggle.com/washimahmed/usa-latlong-for-state-abbreviations
+
+*/
+
+
 
 		
 //Width and height of map
@@ -42,7 +49,7 @@ var div = d3.select("body")
     		.attr("class", "tooltip")               
     		.style("opacity", 0);
 //load in the freq_by_state json
-d3.json("freq_by_state.json").then(function(data) {
+d3.json("freq_by_state_latlong.json").then(function(data) {
 
 // // Load in my states data!
 // d3.csv("stateslived.csv", function(data) {
@@ -53,10 +60,13 @@ d3.json("us-states.json").then(function(json){
 //     counter = 0
     for (let z =0; z<data.length; z++){
 
-        //grab name of state in freq_by_state
+        //grab name of state in freq_by_state_latlog
         var dataState = data[z].NAME;      
         var dataMale = data[z].males;
         var dataFemale = data[z].females;
+        var dataLat = data[z].Latitude;
+        var dataLong = data[z].Longitude;
+        
                            
 
         
@@ -77,7 +87,11 @@ d3.json("us-states.json").then(function(json){
                 console.log('dataState == jsonState');
                 console.log('dataState', dataState)
                 console.log('jsonState', jsonState)
+                console.log('dataLat', dataLat)
+                console.log('dataLong', dataLong)
                 console.log('------')
+                
+                
     //             counter += 1;
     //             console.log(counter);
             // Copy the data value into the JSON
@@ -115,17 +129,17 @@ svg.selectAll("path")
 		 
 
 svg.selectAll("circle")
-	.data(json)
+	.data(data) // i need to add the lat and long of this data from freq_by_statelatlong. I need to modify the actual json too
 	.enter()
 	.append("circle")
 	.attr("cx", function(d) {
-		return projection([d.lon, d.lat])[0];
+		return projection([d.Longitude, d.Latitude])[0];
 	})
 	.attr("cy", function(d) {
-		return projection([d.lon, d.lat])[1];
+		return projection([d.Longitude, d.Latitude][1]);
 	})
 	.attr("r", function(d) {
-		return Math.sqrt(d.years) * 4;
+		return 4;
 	})
 		.style("fill", "rgb(217,91,67)")	
 		.style("opacity", 0.85)	
@@ -150,25 +164,25 @@ svg.selectAll("circle")
 });  
         
 // Modified Legend Code from Mike Bostock: http://bl.ocks.org/mbostock/3888852
-var legend = d3.select("body").append("svg")
-      			.attr("class", "legend")
-     			.attr("width", 140)
-    			.attr("height", 200)
-   				.selectAll("g")
-   				.data(color.domain().slice().reverse())
-   				.enter()
-   				.append("g")
-     			.attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+// var legend = d3.select("body").append("svg")
+//       			.attr("class", "legend")
+//      			.attr("width", 140)
+//     			.attr("height", 200)
+//    				.selectAll("g")
+//    				.data(color.domain().slice().reverse())
+//    				.enter()
+//    				.append("g")
+//      			.attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
 
-  	legend.append("rect")
-   		  .attr("width", 18)
-   		  .attr("height", 18)
-   		  .style("fill", color);
+//   	legend.append("rect")
+//    		  .attr("width", 18)
+//    		  .attr("height", 18)
+//    		  .style("fill", color);
 
-  	legend.append("text")
-  		  .data(legendText)
-      	  .attr("x", 24)
-      	  .attr("y", 9)
-      	  .attr("dy", ".35em")
-      	  .text(function(d) { return d; });
+//   	legend.append("text")
+//   		  .data(legendText)
+//       	  .attr("x", 24)
+//       	  .attr("y", 9)
+//       	  .attr("dy", ".35em")
+//       	  .text(function(d) { return d; });
 	});
